@@ -1,0 +1,168 @@
+\documentclass[a4paper,11pt]{book}
+\usepackage[margin=0.7in,nomarginpar]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{tabularx}
+\usepackage{xlop}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage[table]{xcolor}
+\usepackage{circuitikz}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,intersections}
+\usepackage{polynom}
+%\usepackage{pstricks}
+\usepackage{wrapfig}
+\usepackage[italian]{babel}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{mathtools}
+
+% Code with syntax highlighting
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{placeins}
+\graphicspath{ {./images/} }
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\addtolength{\topmargin}{.2in}
+\addtolength{\textheight}{-.3in}
+
+\newcommand{\sgn}[1]{
+	\text{sgn}\left(#1\right)
+}
+
+\newcommand{\trn}[1]{
+	\text{trn}\left(#1\right)
+}
+
+\newcommand{\arr}[1]{
+	\text{arr}\left(#1\right)
+}
+
+
+\newcommand{\centerfig}[3]{
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=#1\textwidth]{#2}
+	\caption{#3}
+	\label{fig:#2}
+\end{figure}
+}
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\newcommand{\diagram}[2]{
+	\begin{figure}[htbp]
+	\centering
+	\input{./diagrams/#1}
+	\caption{#2}
+	\label{diag:#1}
+	\end{figure}
+}
+
+\def\C{\mathbb{C}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\R{\mathbb{R}}
+\def\Z{\mathbb{Z}}
+\def\F{\mathcal{F}}
+
+% Code Listings
+\definecolor{vgreen}{RGB}{104,180,104}
+\definecolor{vblue}{RGB}{49,49,255}
+\definecolor{vorange}{RGB}{255,143,102}
+\lstset{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+	keepspaces=true,
+}
+\lstdefinestyle{verilog} {
+	language=Verilog,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{vblue},
+	identifierstyle=\color{black},
+	commentstyle=\color{vgreen},
+	numbers=left,
+	numberstyle=\color{black},
+	numbersep=10pt,
+	tabsize=8,
+	literate=*{:}{:}1
+}
+
+\lstdefinestyle{bash} {
+	language=bash,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{vblue},
+	identifierstyle=\color{black},
+	commentstyle=\color{vgreen},
+	tabsize=4,
+%	moredelim=*[s][\colorIndex]{[}{]},
+	literate=*{:}{:}1
+}
+
+\lstdefinestyle{makefile} {
+	language=make,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{vblue},
+	identifierstyle=\color{black},
+	commentstyle=\color{vgreen},
+	tabsize=4,
+	literate=*{:}{:}1
+}
+
+\newcommand{\includecode}[3][c]{\lstinputlisting[caption=#3, style=#1,]{#2}}
+\theoremstyle{plain}% default
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposizione}
+\newtheorem*{cor}{Corollario}
+\theoremstyle{definition}
+\newtheorem{defn}{Definizione}[section]
+\newtheorem{conj}{Congettura}[section]
+\newtheorem{exmp}{Esempio}[section]
+\newtheorem{exrc}[exmp]{Esercizio}
+\theoremstyle{remark}
+\newtheorem*{comm}{Commento}
+\newtheorem*{note}{Nota}
+\newtheorem{caso}{Caso}
+
+
+\begin{document}
+
+\author{A cura di Alessandro Cheli \\ Lezioni di Gianna Maria Del Corso}
+\title{Appunti di Calcolo Numerico}
+\date{A.A 2019-2020}
+
+\frontmatter
+\maketitle
+\tableofcontents
+
+\mainmatter
+\include{./TeX_files/chapter01}
+
+
+\backmatter
+
+
+
+\begin{thebibliography}{9}
+	\bibitem{appunti}
+	Appunti, Codice e Videolezioni del Prof. Marco Danelutto.
+	Corso di Architettura degli Elaboratori, Università di Pisa, 2019.
+\end{thebibliography}
+
+% bibliography, glossary and index would go here.
+
+\end{document}

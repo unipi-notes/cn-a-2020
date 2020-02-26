@@ -1,0 +1,113 @@
+\chapter{Rappresentazione dei Numeri Macchina}
+
+%//TODO recupera lezione 1
+
+\section{Numeri in Virgola Mobile}
+
+I calcolatori hanno registri di dimensioni finite e
+ci sono quindi dei limiti per rappresentare i numeri reali.
+Un problema fondamentale è associare ad ogni configurazione di cifre
+binarie un numero reale in modo che l'insieme dei numeri rappresentati
+sia distribuito correttamente nell'intervallo della retta reale.
+Comunemente,er rappresentare i numeri reali, si usa una rappresentazione
+\textit{a virgola mobile} o \textit{floating point}.
+I numeri floating point si rappresentano in virgola mobile con una \textbf{mantissa} $f$ ed un esponente $e$, dove $\beta$, la base di rappresentazione è generalmente 10:
+
+\begin{eqnarray*}
+    f \beta^e & \text{con } 0 < f < 1
+\end{eqnarray*}
+
+\begin{defn}
+    \textbf{Teorema di rappresentazione in base} \\
+    Sia $x \in \R, x \neq 0$ e $\beta \geq 2$ una base di rappresentazione. Allora esistono e sono unici:
+    \begin{enumerate}
+        \item Un numero $p \in \Z$ detto esponente
+        \item Una successione $\{d_i\}$ con $i \geq 1 \land 0 \leq d_i \leq \beta$ detta cifre della rappresentazione, tali che
+    \end{enumerate}
+
+    \begin{eqnarray*}
+    & d_i \neq 0 & \\
+    & \nexists t : d_i = \beta - 1 & \forall i \geq t \\
+    & x = \sgn{x} \cdot \beta^p \sum_{i=1}^{\infty} d_i \beta^{-i}
+    \end{eqnarray*}
+    Dove $\sum_{i=1}^{+\infty}d_i \beta^{-i}$ è detta \textit{mantissa}.
+
+    Se esiste un indice $k$ tale che $d_k \neq 0 \land d_i = 0 \forall i > k$ allora la rappresentazione si dice \textit{finita di lunghezza $k$}.
+    Se $d_1 \neq 0$ allora la rappresentazione si dice \textit{normalizzata}.  
+
+    Si osserva facilmente che
+    \begin{eqnarray*}
+    0.\overbar{9} = \sum_{i=1}^{\infty} 9 \cdot 10^{-i} = 1 \\
+    =  9\sum_{i=1}^{\infty} 10^{-i} = 9 \left(\frac{1}{1-10^{-i} - 1}\right) = 1
+    \end{eqnarray*}
+
+    è una serie geometrica. Ricordiamoci la serie geometrica parziale:
+    \begin{eqnarray*}
+        S_n = \sum_{k=0}^{n} q^k = \frac{1-q^{n-1}}{1-q} & \text{se } q \neq 1 \\
+        S_n = 1 & \text{se} q = 1
+    \end{eqnarray*}
+    %//TODO dimostrazione serie geometrica
+    %//TODO per casa dimostra per induzione su n
+
+\end{defn}
+
+\begin{defn}
+    \textbf{Insieme dei numeri di macchina} \\
+    L'\textbf{Insieme dei Numeri di Macchina} è rappresentato da:
+\begin{eqnarray*}
+\F(\beta, t, m, M) = \{0\} \cup \{x \in \R : x = x = \sgn{x} \cdot \beta^p \sum_{i=1}^{t} d_i \beta^{-i} \}
+\end{eqnarray*}
+Laddove $\beta$ è la base, $t$ è il numero di cifre ed $m, M$ sono dei limiti per l'esponente tali che $-m \leq p \leq M$. La rappresentazione floating point impone che la rappresentazione sia normalizzata, quindi la prima cifra della mantissa deve essere diversa da 0: $d_1 \neq 0$. Le cifre devono essere in base, quindi $0 \leq d_i \leq \beta-1$. Poiché con $t$ cifre in base $\beta$ si possono rappresentare $\beta^t$ numeri, vanno esclusi quelli la cui prima cifra è nulla.
+
+
+Se $x \neq 0$ ne si deduce facilmente che
+$x \in \F \implies -x \in \F$.
+Quanti sono però tutti i numeri rappresentabili nell'insieme dei numeri di macchina?
+\begin{equation*}
+    \begin{aligned}
+        1 + 2(m + M + 1) (\beta -1) \beta^{t-1}
+    \end{aligned}
+\end{equation*}
+
+La prima configurazione è data dal numero 0, mentre le rimanenti sono date dalle possibili configurazioni dell'esponente e delle mantisse $d_i$. Il numero più piccolo rappresentabile sarà $\omega = \beta^{-1}(1 \cdot \beta^{-1} + 0 \cdot \beta^{-2} + \hdots + 0 \cdot \beta^{-t}) = \beta^{-m-1}$ mentre il numero più grande rappresentabile sarà $\Omega = \beta^M (\beta -1) \sum_{i=1}^{t} \beta^{-i} = \beta^M (1-\beta^{-t})$. Il successore di un numero macchina $a \in \F(\beta, t, m, M) = \beta^p \cdot \sum_{i=1}^{t} d_i \beta^{-i}$ sarà $b = a + \beta^{p-t}$. Si ha anche che $\abs{b-a} = \beta^{p-t}$ è la distanza tra due numeri macchina successivi.
+
+Un numero reale non nullo $x = \pm 0.d_1d_2\hdots \beta^p$ appartiene a $\F$ soltanto se: $d_1 \neq 0$ (la rappresentazione è normalizzata), $-m \leq p \leq M$ (l'esponente appartiene all'intervallo degli esponenti rappresentabili) e $d_i = 0 \forall i > t$ (ogni cifra dopo il numero di cifre rappresentabili è nulla).
+
+Se $x \notin \F(\beta, t, m, M)$ si pone il problema di \textbf{approssimare} $x$ ad un valore detto $\tilde{x}$ o segnalare un errore.
+Se l'esponente $p$ necessario per rappresentare $x$ non appartiene all'intervallo discreto dato dagli estremi $-m$ ed $M$ allora si verificano
+le condizioni di \textit{underflow} e \textit{overflow}. In tal caso un linguaggio di programmazione o un motore di calcolo numerico possono segnalare  un errore o restituire rispettivamente $\omega$ e $\Omega$. Se l'esponente $p$ appartiene all'intervallo degli esponenti rappresentabili in $\F$, ma le cifre $d_i$, con $i > t$ (non rappresentabili nei numeri macchina) non sono tutte nulle, ne consegue il bisogno di approssimare $x$ a $\tilde{x}$ con arrotondamento o troncamento.
+
+\end{defn}
+
+%//TODO IEEE standard +inf e -inf
+% 1 bit di segno, 11 di esponente e 52 di mantissa (1 double). p va da -1021 a 1024. se gli esponenti sono tutti ad 1 allora se m = 0 allora +-inf. se m \neq 0 allora nan (configurazione speciale).
+% Se gli esponenti sono tutti 0 allora rappresenta dei numeri denormalizzati (fra 0 e \omega) che si scrivono con (0.0 d_2, d_3, d_4)
+% Se un numero $x \notin (-\Omega, \Omega)$ allora va in overflow
+
+%se $\abs{x} < \omega$ \implies \text{underflow} \implies 0
+%//TODO arrotondamento, ERRORE ASSOLUTO E RELATIVO
+
+\begin{defn}
+    \textbf{Arrotondamento, Troncamento, Errori assoluti e Relativi} \\
+    Dato un numero $\overbar{a} = 3.141592\hdots$ (proprio $\pi$)
+    Nella rappresentazione macchina abbiamo $t = 5, \F(10,5,m,M)$.
+    Definiamo il troncamento come
+    $\tilde{x} = \trn{\overbar{a}} = 3.1415$ e definiamo
+    l'arrotondamento come $\tilde{x} = \arr{\overbar{a} = 3.1416}$.
+
+    L'\textbf{errore assoluto} è $\tilde{x} - x$ mentre l'errore relativo è $\frac{\tilde{x} - x}{x}$
+\end{defn}
+
+
+\begin{lem}
+    Se non avviene overflow e underflow allora
+    \begin{eqnarray*}
+        \abs{\tilde{x} - x} < \beta^{p-t} & \text{se } \tilde{x} = \trn{x} \\
+        \abs{\tilde{x} - x} \leq \frac{1}{2} \beta^{p-t} & \text{se } \tilde{x} = \arr{x}
+    \end{eqnarray*}
+\end{lem}
+
+\begin{defn}
+    \textbf{Teorema dell'errore relativo} \\
+    
+\end{defn}
