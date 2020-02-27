@@ -69,45 +69,164 @@ Quanti sono però tutti i numeri rappresentabili nell'insieme dei numeri di macc
     \end{aligned}
 \end{equation*}
 
-La prima configurazione è data dal numero 0, mentre le rimanenti sono date dalle possibili configurazioni dell'esponente e delle mantisse $d_i$. Il numero più piccolo rappresentabile sarà $\omega = \beta^{-1}(1 \cdot \beta^{-1} + 0 \cdot \beta^{-2} + \hdots + 0 \cdot \beta^{-t}) = \beta^{-m-1}$ mentre il numero più grande rappresentabile sarà $\Omega = \beta^M (\beta -1) \sum_{i=1}^{t} \beta^{-i} = \beta^M (1-\beta^{-t})$. Il successore di un numero macchina $a \in \F(\beta, t, m, M) = \beta^p \cdot \sum_{i=1}^{t} d_i \beta^{-i}$ sarà $b = a + \beta^{p-t}$. Si ha anche che $\abs{b-a} = \beta^{p-t}$ è la distanza tra due numeri macchina successivi.
+\end{defn}
+La prima configurazione è data dal numero 0, mentre le rimanenti sono date dalle possibili configurazioni dell'esponente e delle mantisse $d_i$.
 
-Un numero reale non nullo $x = \pm 0.d_1d_2\hdots \beta^p$ appartiene a $\F$ soltanto se: $d_1 \neq 0$ (la rappresentazione è normalizzata), $-m \leq p \leq M$ (l'esponente appartiene all'intervallo degli esponenti rappresentabili) e $d_i = 0 \forall i > t$ (ogni cifra dopo il numero di cifre rappresentabili è nulla).
+\begin{defn}
+    \textbf{$\omega$ e $\Omega$} \\
+    Il numero più piccolo rappresentabile nell'insieme dei numeri di macchina sarà
 
-Se $x \notin \F(\beta, t, m, M)$ si pone il problema di \textbf{approssimare} $x$ ad un valore detto $\tilde{x}$ o segnalare un errore.
-Se l'esponente $p$ necessario per rappresentare $x$ non appartiene all'intervallo discreto dato dagli estremi $-m$ ed $M$ allora si verificano
-le condizioni di \textit{underflow} e \textit{overflow}. In tal caso un linguaggio di programmazione o un motore di calcolo numerico possono segnalare  un errore o restituire rispettivamente $\omega$ e $\Omega$. Se l'esponente $p$ appartiene all'intervallo degli esponenti rappresentabili in $\F$, ma le cifre $d_i$, con $i > t$ (non rappresentabili nei numeri macchina) non sono tutte nulle, ne consegue il bisogno di approssimare $x$ a $\tilde{x}$ con arrotondamento o troncamento.
+    \begin{eqnarray*}
+        \omega = \beta^{-1}(1 \cdot \beta^{-1} + 0 \cdot \beta^{-2} + \hdots + 0 \cdot \beta^{-t}) = \beta^{-m-1}
+    \end{eqnarray*}
+
+    mentre il numero più grande rappresentabile sarà
+
+    \begin{eqnarray*}
+        \Omega = \beta^M (\beta -1) \sum_{i=1}^{t} \beta^{-i} = \beta^M (1-\beta^{-t})
+    \end{eqnarray*}
+\end{defn}
+
+
+\begin{defn}
+    \textbf{Successore di un numero macchina} \\
+    Il successore di un numero macchina $a \in \F(\beta, t, m, M) = \beta^p \cdot \sum_{i=1}^{t} d_i \beta^{-i}$ sarà $b = a + \beta^{p-t}$. Si ha anche che $\abs{b-a} = \beta^{p-t}$ è la distanza tra due numeri macchina successivi.
 
 \end{defn}
 
-%//TODO IEEE standard +inf e -inf
-% 1 bit di segno, 11 di esponente e 52 di mantissa (1 double). p va da -1021 a 1024. se gli esponenti sono tutti ad 1 allora se m = 0 allora +-inf. se m \neq 0 allora nan (configurazione speciale).
-% Se gli esponenti sono tutti 0 allora rappresenta dei numeri denormalizzati (fra 0 e \omega) che si scrivono con (0.0 d_2, d_3, d_4)
-% Se un numero $x \notin (-\Omega, \Omega)$ allora va in overflow
-
-%se $\abs{x} < \omega$ \implies \text{underflow} \implies 0
-%//TODO arrotondamento, ERRORE ASSOLUTO E RELATIVO
 
 \begin{defn}
-    \textbf{Arrotondamento, Troncamento, Errori assoluti e Relativi} \\
-    Dato un numero $\overbar{a} = 3.141592\hdots$ (proprio $\pi$)
-    Nella rappresentazione macchina abbiamo $t = 5, \F(10,5,m,M)$.
+    \textbf{Overflow e Underflow} \\
+    Un numero reale non nullo $x = \pm 0.d_1d_2\hdots \beta^p$ appartiene a $\F$ soltanto se:
+    
+    \begin{itemize}
+        \item $d_1 \neq 0$ (la rappresentazione è normalizzata)
+        \item $-m \leq p \leq M$ (l'esponente appartiene all'intervallo degli esponenti rappresentabili) e $d_i = 0 \forall i > t$ (ogni cifra dopo il numero di cifre rappresentabili è nulla).
+    \end{itemize}
+    
+    Se $x \notin \F(\beta, t, m, M)$ si pone il problema di \textbf{approssimare} $x$ ad un valore detto $\tilde{x}$ o segnalare un errore.
+    Se l'esponente $p$ necessario per rappresentare $x$ non appartiene all'intervallo discreto dato dagli estremi $-m$ ed $M$ allora si verificano
+    le condizioni di \textit{underflow} e \textit{overflow}. In tal caso un linguaggio di programmazione o un motore di calcolo numerico possono segnalare  un errore o restituire rispettivamente $\omega$ e $\Omega$. Se l'esponente $p$ appartiene all'intervallo degli esponenti rappresentabili in $\F$, ma le cifre $d_i$, con $i > t$ (non rappresentabili nei numeri macchina) non sono tutte nulle, ne consegue il bisogno di approssimare $x$ a $\tilde{x}$ con arrotondamento o troncamento.
+\end{defn}
+
+
+\begin{defn}
+    \textbf{Standard IEEE-754 per numeri floating point a doppia precisione da 64 bit} \\ 
+    Lo standard è il più usato dai costruttori di macchine per rappresenta numeri floating point. Lo standard accetta tre categorie di dati:
+    \begin{enumerate}
+        \item Numeri normalizzati: $d_1 \neq 0$
+        \item Numeri non normalizzati
+        \item Numeri speciali
+    \end{enumerate}
+    La base usata è $\beta = 2$ e ci sono tre possibili precisioni: semplice, doppia ed estesa. Vediamo la precisione doppia:
+
+    In un registro da 64 bit sono contenuti:
+    \begin{itemize}
+        \item 1 bit di segno 
+        \item 11 bit di esponente 
+        \item 52 bit di mantissa
+    \end{itemize}
+
+    L'esponente $p$ è un intero che varia da -1024 a 1023, rappresentato in complemento a 2. Un valore di $p = 1023$ implica che l'esponente attuale è 0: $2^{p - 1023}$. Un valore dell'esponente di 1024 (tutti 1 nella configurazione di bit) serve per rappresentare numeri speciali. Se l'esponente è -1023 (tutti 0 nella configurazione), allora rappresenta dei numeri denormalizzati, compresi fra 0 ed $\omega$. Se si ha che
+    un numero $x \notin (-\Omega, \Omega)$ allora si ha un caso di \textit{overflow}.
+\end{defn}
+
+\section{Arrotondamento, Troncamento, Errori assoluti e Relativi}
+
+\begin{defn}
+    \textbf{Arrotondamento e Troncamento} \\
+    Dato un numero $\overbar{a} = 3.141592\hdots$ (proprio $\pi$),
+    e una rappresentazione macchina con $t = 5, \F(10,5,m,M)$.
     Definiamo il troncamento come
     $\tilde{x} = \trn{\overbar{a}} = 3.1415$ e definiamo
     l'arrotondamento come $\tilde{x} = \arr{\overbar{a} = 3.1416}$.
 
-    L'\textbf{errore assoluto} è $\tilde{x} - x$ mentre l'errore relativo è $\frac{\tilde{x} - x}{x}$
+    Più precisamente:
+    \begin{eqnarray*}
+        \trn{x} = \beta^p \sum_{i=1}^{t} d_i \beta^{-i} \\
+        \arr{x} = \beta^p \trn{\sum_{i=1}^{t+1} d_i \beta^{-i} + \frac{1}{2} \beta^{-t}}
+    \end{eqnarray*}
+
+    Da notare che nell'arrotondamento di un numero si può verificare \textit{overflow}.
 \end{defn}
 
 
-\begin{lem}
+    L'\textbf{errore assoluto} è  mentre l'errore relativo è
+    \begin{eqnarray*}
+        \text{errore assoluto} & \tilde{x} - x \\
+        \text{errore relativo } & \epsilon_x = \frac{\tilde{x} - x}{x}
+    \end{eqnarray*}
+
+
+\begin{thm}
     Se non avviene overflow e underflow allora
     \begin{eqnarray*}
-        \abs{\tilde{x} - x} < \beta^{p-t} & \text{se } \tilde{x} = \trn{x} \\
-        \abs{\tilde{x} - x} \leq \frac{1}{2} \beta^{p-t} & \text{se } \tilde{x} = \arr{x}
+        \abs{\trn{x} - x} < \beta^{p-t}  \\
+        \abs{\arr{x} - x} \leq \frac{1}{2} \beta^{p-t}
     \end{eqnarray*}
-\end{lem}
 
-\begin{defn}
-    \textbf{Teorema dell'errore relativo} \\
-    
-\end{defn}
+Dove la disuguaglianza vale $\iff d_{t+1} = \beta/2 \land d_{t+i} = 0 \forall i \geq 2$
+\end{thm}
+
+\begin{proof}
+    Se $x = \Omega \implies \trn{x} - x = \arr{x} - x = 0$. Altrimenti, siano
+    $a,b$ i due numeri di macchina consecutivi.
+
+    \begin{eqnarray*}
+        a = \beta^p \sum_{i=1}^{t} d_i \beta^{-i}, & & b = \beta^p \left( \sum_{i=1}^{t} d_i \beta^{-i} + \beta^{-i} \right)
+    \end{eqnarray*}
+    Avendo $a \leq x < b$ risulta che
+
+    \begin{eqnarray*}
+        \trn{x} = a & & x - \trn{x} < b - a = \beta^{p -t}
+    \end{eqnarray*}
+
+    Con la quale abbiamo dimostrato la prima disuguaglianza del teorema. Risulta poi che
+
+    \begin{eqnarray*}
+\arr{x} = \begin{cases}
+    a & \text{se } x < \frac{a+b}{2} \\
+    b & \text{se } x \geq \frac{a+b}{2}
+\end{cases} \\
+\implies \abs{\arr{x} - x} \leq \frac{b - a}{2} = \frac{1}{2} \beta^{p - t}
+    \end{eqnarray*}
+
+    L'uguaglianza per dimostrare la seconda disuguaglianza vale solo se
+
+    \begin{eqnarray*}
+        x = \frac{a + b}{2} \iff d_{t+1} = \frac{\beta}{2} \land d_{t+i} = 0 \forall i \geq 2
+    \end{eqnarray*}
+\end{proof}
+
+
+\begin{thm}
+    Sia $x \neq 0, x \in \R$, non in underflow o overflow e sia
+    $\tilde{x} \in \F(\beta, t, m, M)$. Si ha allora che
+    \begin{eqnarray*}
+        \epsilon_x = \dfrac{\tilde{x} - x}{x} & \text{tale che} & \abs{\epsilon_x} < u \\
+        & u = \begin{cases}
+            \frac{1}{2} \beta^{1-t} & \text{se } \tilde{x} = \arr{x} \\
+            \beta^{1-t} & \text{se } \tilde{x} = \trn{x} \\
+        \end{cases}
+    \end{eqnarray*}
+    Dove $u$ è detta \textbf{precisione di macchina} o \textbf{epsilon} di macchina.
+\end{thm}
+
+
+    \begin{proof}
+        % //TODO proof
+        proof
+    \end{proof}
+
+    Si ha quindi,
+    \begin{eqnarray*}
+        \abs{\tilde{x} - x} < \abs{a -b } < \frac{1}{2} \abs{a - b}
+        x = \beta^p\left(\sum_{i=1}^{+\infty} d_i \beta^{-i}\right) \\
+        \tilde{x} = \beta^p \left( \sum_{i=1}^{t} c_i \beta^{-i} \right) \\
+        \abs{x} \geq \beta^{p-1} \\
+% \\TODO fix        \trn{x} = \tilde{x} \implies \abs{\dfrac{\tilde{x} - x}{x}} \leq \dfrac{\frac{1}{2} \beta^2}{2} \\
+        \arr{x} = \tilde{x} \implies \abs{\dfrac{\tilde{x} - x}{x}} \leq \dfrac{\frac{1}{2} \beta^{p - t}}{x} < \frac{1}{2} \dfrac{\beta^{p-t}}{\beta^{p-1}} = \frac{1}{2} \beta^{1-t} \\
+    \end{eqnarray*}
+
+
+%% \\TODO fixa pag 16-19 bevilacqua
